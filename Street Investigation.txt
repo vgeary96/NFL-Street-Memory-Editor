@@ -1,0 +1,53 @@
+Dev Points Address: 8048c626(?), 80485796
+Player 1 address: 80484ac0
+
+RB, passing, speed, blocking
+
+Each row contains 16 hex tuple vals
+
+Position = down 4, over 3/4. (+67/68) QB = 00 21, RB = 00 A1, WR = 01 21
+	Pattern(?): 00 21 + 00 80 per position.
+
+Passing = Down 4, over 11. (+75) 02 (02???) = 0, 0A (20) = 1, 14 (20) = 2... so +1 = 08 for 0 to 1 and 0A otherwise(?)
+	2 -> 10 -> 20 -> 30 -> ... -> 200
+	Pattern(?): 02 -> 0A -> 14 -> 1E -> ... -> C8
+
+Speed = Down 3, over 9. (+57)
+	1 -> 5 -> 10 -> 15 -> ... -> 95 -> 100
+	Pattern(?): 01 -> 05 -> 0A -> 0F -> ... -> 5F -> 64
+
+Blocking = Down 3, over 14. (+62)
+	Goes from 8 -> 40 -> 80 -> 120 -> ... -> 720
+	Pattern(?): 08 -> 28 -> 50 -> 04 78 -> ... -> 06 D0
+
+Agility: Down 3, Over 12. (+60) .......?
+	Goes from  16 -> 80 -> 160 -> ... -> 228
+	Pattern(?): 10 -> 50 -> A0 -> ... -> 0E 40
+
+Catching: Down 3, Over 11. (+59)
+	Goes from  8 -> 40 -> 80 -> ... -> 800
+	Pattern(?): 08 -> 28 -> 50 -> ... -> 03 20
+
+Run Power: Down 3, Over 15. (+63)
+	Goes from  16 -> 80 (133) -> 160 (138) -> ... ->  (228)
+	Pattern(?): 10 -> 50 -> A0 -> ... -> 0E 40
+	Verdict: Looks like the middle two bits
+
+Carrying: Down 4, Over 9. (+73)
+	Goes from  8 -> 40 -> 80 -> ... -> 800
+	Pattern(?): 08 -> 28 -> 50 -> ... -> 03 20
+
+Tackling: Down 3, Over 13. (+61)
+	Goes from  4 -> 20 -> 40 -> ... -> 
+	Pattern(?): 04 -> 14 -> 28 -> ... ->
+
+Coverage: Down 5, Over 2. (+82)
+	Goes from: 2 -> 10 -> 20 -> ... -> 
+	Pattern(?): 02 -> 0A -> 14 -> ... ->
+
+D-Moves: Down 4, Over 13. (+77)
+	Goes from  3 -> 11 -> 21 -> ... ->
+	Pattern(?): 03 -> 0B -> 15 -> ... ->
+
+
+80484b56
