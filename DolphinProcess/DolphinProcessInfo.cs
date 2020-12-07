@@ -6,6 +6,12 @@ public class DolphinProcessInfo {
     
     #region Properties
 
+    public IntPtr ProcessPointer
+    {
+        get;
+        private set;
+    }
+
     public IntPtr MemoryStartAddress 
     { 
         get; 
@@ -26,7 +32,7 @@ public class DolphinProcessInfo {
             return false;
         }
         Process process = processList[0];
-        IntPtr processPtr = WindowsSystemUtils.OpenProcess(0x0400 | 0x0008 | 0x0020 | 0x0010, false, process.Id);
+        ProcessPointer = WindowsSystemUtils.OpenProcess(0x0400 | 0x0008 | 0x0020 | 0x0010, false, process.Id);
 
         WindowsSystemUtils.SYSTEM_INFO sys_info = new WindowsSystemUtils.SYSTEM_INFO();
         WindowsSystemUtils.GetSystemInfo(out sys_info);
@@ -36,16 +42,15 @@ public class DolphinProcessInfo {
         do
         {
             WindowsSystemUtils.MEMORY_BASIC_INFORMATION64 memoryInfo;
-            int result = WindowsSystemUtils.VirtualQueryEx(processPtr, (IntPtr)currentAddress, out memoryInfo, (uint)Marshal.SizeOf(typeof(WindowsSystemUtils.MEMORY_BASIC_INFORMATION64)));
+            int result = WindowsSystemUtils.VirtualQueryEx(ProcessPointer, (IntPtr)currentAddress, out memoryInfo, (uint)Marshal.SizeOf(typeof(WindowsSystemUtils.MEMORY_BASIC_INFORMATION64)));
 
             // We are looking for MEM_MAPPED (0x40000) memory of size 0x2000000
             if ((int)memoryInfo.RegionSize == 0x2000000 && memoryInfo.Type == 0x40000)
             {
-
                 // Confirm that the current page has valid working set information, otherwise ignore it
                 WindowsSystemUtils._PSAPI_WORKING_SET_EX_INFORMATION[] WsInfo = new WindowsSystemUtils._PSAPI_WORKING_SET_EX_INFORMATION [1];
                 WsInfo[0].VirtualAddress = (IntPtr)memoryInfo.BaseAddress;
-                if (WindowsSystemUtils.QueryWorkingSetEx(processPtr, WsInfo, Marshal.SizeOf<WindowsSystemUtils._PSAPI_WORKING_SET_EX_INFORMATION>()))
+                if (WindowsSystemUtils.QueryWorkingSetEx(ProcessPointer, WsInfo, Marshal.SizeOf<WindowsSystemUtils._PSAPI_WORKING_SET_EX_INFORMATION>()))
                 {
                     Console.WriteLine(WsInfo[0].VirtualAttributes.Flags.ToString("X8"));
                     // Checks the Valid flag on the PSAPI response

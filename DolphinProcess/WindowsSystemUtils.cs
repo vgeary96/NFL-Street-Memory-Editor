@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 public class WindowsSystemUtils
 {
-        public enum AllocationProtectEnum : uint
+    public enum AllocationProtectEnum : uint
     {
         PAGE_EXECUTE = 0x00000010,
         PAGE_EXECUTE_READ = 0x00000020,
@@ -41,11 +41,17 @@ public class WindowsSystemUtils
     public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
     [DllImport("kernel32.dll")]
+    public static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [Out] byte[] lpBuffer, int dwSize, out IntPtr lpNumberOfBytesRead);
+
+    [DllImport("kernel32.dll", SetLastError = true)]
+    public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, Int32 nSize, out IntPtr lpNumberOfBytesWritten);
+
+    [DllImport("kernel32.dll")]
     public static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION64 lpBuffer, uint dwLength);
 
     [DllImport("psapi", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool QueryWorkingSetEx(IntPtr hProcess, [In, Out] _PSAPI_WORKING_SET_EX_INFORMATION [] pv, int cb);
+    public static extern bool QueryWorkingSetEx(IntPtr hProcess, [In, Out] _PSAPI_WORKING_SET_EX_INFORMATION[] pv, int cb);
 
     [StructLayout(LayoutKind.Sequential)]
     public struct SYSTEM_INFO
@@ -90,15 +96,15 @@ public class WindowsSystemUtils
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct _PSAPI_WORKING_SET_EX_INFORMATION 
+    public struct _PSAPI_WORKING_SET_EX_INFORMATION
     {
         public IntPtr VirtualAddress;
 
-        public _PSAPI_WORKING_SET_EX_BLOCK  VirtualAttributes;
+        public _PSAPI_WORKING_SET_EX_BLOCK VirtualAttributes;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct _PSAPI_WORKING_SET_EX_BLOCK 
+    public struct _PSAPI_WORKING_SET_EX_BLOCK
     {
         public ulong Flags;
 
